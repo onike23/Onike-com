@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width">
+<title>ONIKE PENALTY</title>
+<style>body{margin:0;background:#000}canvas{background:#0a0;display:block}
+.hud{color:#fff;text-align:center;font:24px Arial;padding:10px}
+.btn{width:33%;padding:20px;background:#0f8;border:0;font:bold 18px Arial}</style>
+</head><body>
+<div class="hud">GOAL:<span id="g">0</span> MISS:<span id="m">0</span></div>
+<canvas id="x" width="400" height="600"></canvas>
+<div><button class="btn" onclick="s(130)">LEFT</button>
+<button class="btn" onclick="s(200)">MID</button>
+<button class="btn" onclick="s(270)">RIGHT</button></div>
+<script>
+c=x.getContext('2d');G=0;M=0;bx=200;by=550;kg=0;ky=90;kd=0;go=0;tx=200;
+function d(){c.clearRect(0,0,400,600);
+c.fillStyle='#06c';c.fillRect(0,0,400,100); // sky+fans
+c.fillStyle='#080';c.fillRect(0,100,400,500); // pitch
+c.strokeStyle='#fff';c.lineWidth=3;c.strokeRect(100,120,200,150); // goal
+c.fillStyle='#f00';c.fillRect(ky-20,ky+20,40,30);c.fillStyle='#fa0';c.beginPath();c.arc(ky,ky+10,10,0,6.28);c.fill(); // keeper
+c.fillStyle='#0f8';c.fillRect(190,520,20,25);c.fillStyle='#fd0';c.beginPath();c.arc(200,510,10,0,6.28);c.fill(); // player
+if(go){by-=15;bx+=(tx-bx)*0.2;if(by<130){go=0;if(Math.abs(bx-ky)<30&&kd==tx){M++}else{G++}
+g.innerText=G;m.innerText=M;setTimeout(()=>{bx=200;by=550;go=0},1000)}}
+c.fillStyle='#fff';c.beginPath();c.arc(bx,by,12,0,6.28);c.fill();
+requestAnimationFrame(d)}d();
+function s(t){if(!go){go=1;tx=t;ky=[130,200,270][Math.random()*3|0];kd=t}}
+</script></body></html>
