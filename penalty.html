@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html><head><meta name="viewport" content="width=device-width">
+<title>ONIKE PENALTY</title>
+<style>
+body{margin:0;background:#000}
+canvas{background:#2a7d32;display:block}
+.hud{color:#fff;text-align:center;font:bold 26px Arial;padding:12px}
+.btns{display:flex}
+.btn{width:33.3%;padding:22px;background:#00ff88;border:0;font:bold 18px Arial}
+</style></head><body>
+<div class="hud">GOALS: <span id="g">0</span> | MISSES: <span id="m">0</span></div>
+<canvas id="c" width="400" height="650"></canvas>
+<div class="btns">
+<button class="btn" onclick="shoot('left')">LEFT</button>
+<button class="btn" onclick="shoot('mid')">CENTER</button>
+<button class="btn" onclick="shoot('right')">RIGHT</button>
+</div>
+<script>
+let ctx=c.getContext('2d'),G=0,M=0;
+let ball={x:200,y:540,r:12,go:0,tx:200},keep={x:200,y:100,dv:''};
+function draw(){
+ctx.clearRect(0,0,400,650);
+ctx.fillStyle='#1a4d8f';ctx.fillRect(0,0,400,110); // sky
+for(let i=0;i<200;i++){ctx.fillStyle=i%3?'#ff0000':'#00ff88';ctx.fillRect(Math.random()*400,15+Math.random()*70,4,4)} // fans
+ctx.fillStyle='#2a7d32';ctx.fillRect(0,110,400,540); // pitch
+ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.strokeRect(80,140,240,180);ctx.strokeRect(140,140,120,50); // boxes
+ctx.lineWidth=4;ctx.strokeRect(160,140,80,40); // goal
+// shadows
+ctx.fillStyle='rgba(0,0,0,0.3)';ctx.ellipse(keep.x,keep.y+70,28,7,0,0,6.28);ctx.fill();ctx.ellipse(200,550,22,6,0,0,6.28);ctx.fill();
+// KEEPER
+ctx.fillStyle='#000';ctx.fillRect(keep.x-14,keep.y+40,8,22);ctx.fillRect(keep.x+6,keep.y+40,8,22);
+ctx.fillStyle='#ff0033';ctx.fillRect(keep.x-16,keep.y+15,32,30);ctx.fillRect(keep.x-22,keep.y+18,8,18);ctx.fillRect(keep.x+14,keep.y+18,8,18);
+ctx.fillStyle='#ffdbac';ctx.beginPath();ctx.arc(keep.x,keep.y+5,12,0,6.28);ctx.fill();
+// PLAYER ONIKE
+ctx.fillStyle='#000';ctx.fillRect(190,530,9,22);ctx.fillRect(201,530,9,22);
+ctx.fillStyle='#00ff88';ctx.fillRect(186,510,28,25);ctx.fillRect(182,512,6,16);ctx.fillRect(212,512,6,16);
+ctx.fillStyle='#ffdbac';ctx.beginPath();ctx.arc(200,500,11,0,6.28);ctx.fill();
+// BALL
+if(ball.go){ball.y-=17;ball.x+=(ball.tx-ball.x)*0.15;if(ball.y<150){ball.go=0;if(Math.abs(ball.x-keep.x)<32&&keep.dv==ball.tx){M++}else{G++}g.innerText=G;m.innerText=M;setTimeout(()=>{ball={x:200,y:540,r:12,go:0,tx:200};keep.dv=''},1200)}}
+ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(ball.x,ball.y,ball.r,0,6.28);ctx.fill();
+requestAnimationFrame(draw)}draw();
+function shoot(dir){if(ball.go)return;ball.go=1;ball.tx=dir=='left'?155:dir=='right'?245:200;keep.dv=[155,200,245][Math.floor(Math.random()*3)];keep.x+=(keep.dv-keep.x)*0.3;}
+</script></body></html>
