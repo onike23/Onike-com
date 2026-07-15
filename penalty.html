@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONIKE PENALTY</title>
+<style>
+  body{margin:0;background:#000;font-family:Arial;overflow:hidden}
+  canvas{display:block;margin:auto}
+  .hud{position:absolute;top:10px;width:100%;text-align:center;color:white;font-size:24px;font-weight:bold;text-shadow:2px 2px 4px #000}
+  .btns{position:absolute;bottom:20px;width:100%;display:flex;justify-content:space-around}
+  .btn{width:30%;padding:20px;font-size:18px;font-weight:bold;border:none;border-radius:15px;background:#00ff88;color:#000}
+  .btn:active{background:#00cc66;transform:scale(0.95)}
+</style>
+</head>
+<body>
+<div class="hud">GOALS: <span id="score">0</span> | MISSES: <span id="miss">0</span></div>
+<canvas id="game" width="400" height="700"></canvas>
+
+<div class="btns">
+  <button class="btn" onclick="shoot('left')">← LEFT</button>
+  <button class="btn" onclick="shoot('middle')">CENTER</button>
+  <button class="btn" onclick="shoot('right')">RIGHT →</button>
+</div>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+let score = 0, misses = 0;
+let ball = {x:200, y:550, r:12, shooting:false, target:''};
+let keeper = {x:200, y:90, diving:''};
+
+function drawStadium(){
+  // SKY
+  ctx.fillStyle='#1a4d8f';
+  ctx.fillRect(0,0,400,200);
+  
+  // FANS - colored dots
+  ctx.fillStyle='#ff0000'; // ONIKE red fans
+  for(let i=0;i<200;i++){
+    let fx = Math.random()*400;
+    let fy = 10 + Math.random()*80;
+    ctx.fillRect(fx, fy, 2, 2);
+  }
+  ctx.fillStyle='#00ff88'; // ONIKE green fans
+  for(let i=0;i<200;i++){
+    let fx = Math.random()*400;
+    let fy = 10 + Math.random()*80;
+    ctx.fillRect(fx, fy, 2, 2);
+  }
+  
+  // STANDS
+  ctx.fillStyle='#333';
+  ctx.fillRect(0,90,400,30);
+  
+  // PITCH
+  ctx.fillStyle='#2a7d32';
+  ctx.fillRect(0,120,400,580);
+  
+  // LINES
+  ctx.strokeStyle='white'; ctx.lineWidth=3;
+  ctx.strokeRect(60,130,280,220); // penalty box
+  ctx.strokeRect(130,130,140,60); // 6 yard box
+  ctx.beginPath(); ctx.arc(200,190,30,0,Math.PI*2); ctx.stroke(); // penalty spot circle
+}
+
+function drawRealPlayer(){
+  // SHADOW
+  ctx.fillStyle='rgba(0,0,0,0.3)';
+  ctx.ellipse(200,560,20,5,0,0,Math.PI*2); ctx.fill();
+  
+  // LEGS
+  ctx.fillStyle='#000';
+  ctx.fillRect(190,540,8,25); // left leg
+  ctx.fillRect(202,540,8,25); // right leg
+  
+  // ONIKE JERSEY - Green
+  ctx.fillStyle='#00ff88';
+  ctx.fillRect(188,520,24,25);
+  
+  // ARMS
+  ctx.fillStyle='#ffdbac';
+  ctx.fillRect(184,522,6,15);
+  ctx.fillRect(210,522,6,15);
+  
+  // HEAD
+  ctx.fillStyle='#ffdbac';
+  ctx.beginPath(); ctx.arc(200,510,10,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#000'; // hair
+  ctx.beginPath(); ctx.arc(200,505,11,Math.PI,0); ctx.fill();
+}
+
+function drawRealKeeper(){
+  // SHADOW
+  ctx.fillStyle='rgba(0,0,0,0.3)';
+  ctx.ellipse(keeper.x,keeper.y+75,25,6,0,0,Math.PI*2); ctx.fill();
+  
+  // LEGS
+  ctx.fillStyle='#000';
+  ctx.fillRect(keeper.x-15, keeper.y+45, 10, 25);
+  ctx.fillRect(keeper.x+5, keeper.y+45, 10, 25);
+  
+  // KEEPER JERSEY - Red
+  ctx.fillStyle='#ff0033';
+  ctx.fillRect(keeper.x-18, keeper.y+20, 36, 30);
+  
+  // GLOVES
+  ctx.fillStyle='#ffcc00';
+  if(keeper.diving=='left'){
+    ctx.fillRect(keeper.x-35, keeper.y+25, 18, 10);
+  } else if(keeper.diving=='right'){
+    ctx.fillRect(keeper.x+17, keeper.y+25, 18, 10);
+  } else {
+    ctx.fillRect(keeper.x-28, keeper.y+25, 12, 10);
+    ctx.fillRect(keeper.x+16, keeper.y+25, 12, 10);
+  }
+  
+  // HEAD
+  ctx.fillStyle='#ffdbac';
+  ctx.beginPath(); ctx.arc(keeper.x, keeper.y+10, 11, 0, Math.PI*2); ctx.fill();
+}
+
+function drawRealBall(){
+  ctx.fillStyle='white';
+  ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#000'; ctx.lineWidth=1;
+  // ball pattern
+  ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r*0.6, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ball.x-ball.r, ball.y); ctx.lineTo(ball.x+ball.r, ball.y); ctx.stroke();
+}
+
+function drawGoal(){
+  ctx.strokeStyle='white'; ctx.lineWidth=4;
+  ctx.strokeRect(120,130,160,80); // goal posts
+  ctx.strokeStyle='rgba(255,255,255,0.3)'; // net
+  for(let i=120;i<=280;i+=10){ ctx.beginPath(); ctx.moveTo(i,130); ctx.lineTo(i,210); ctx.stroke(); }
+  for(let i=130;i<=210;i+=10){ ctx.beginPath(); ctx.moveTo(120,i); ctx.lineTo(280,i); ctx.stroke(); }
+}
+
+function shoot(direction){
+  if(ball.shooting) return;
+  ball.shooting = true;
+  ball.target = direction;
+  keeper.diving = Math.random() > 0.4 ? direction : ['left','middle','right'][Math.floor(Math.random()*3)];
+  
+  let targetX = direction=='left'?150 : direction=='right'?250 : 200;
+  let speed = 18;
+  
+  let shootInterval = setInterval(()=>{
+    ball.y -= speed;
+    ball.x += (targetX - ball.x) * 0.15;
+    
+    if(ball.y < 140){
+      clearInterval(shootInterval);
+      let keeperReach = Math.abs(ball.x - keeper.x);
+      if(keeperReach < 35 && keeper.diving==direction){
+        misses++; // SAVED!
+      } else {
+        score++; // GOOOAL!
+      }
+     
