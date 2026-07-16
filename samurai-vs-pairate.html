@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Samurai vs Pirate - Onike</title>
+<style>
+  body { margin:0; background:#0a0a1a; color:#fff; font-family:Arial; text-align:center; }
+  canvas { background: linear-gradient(#1a0033, #000); display:block; margin:10px auto; border:3px solid #ff00ff; }
+  h1 { color:#00ffff; text-shadow:0 0 10px #ff00ff; }
+  .hp { display:flex; justify-content:space-around; margin:10px; }
+  .bar { width:40%; height:20px; background:#333; border:2px solid #fff; }
+  .fill { height:100%; background:#00ff00; }
+</style>
+</head>
+<body>
+<h1>⚔️ SAMURAI vs PIRATE ⚔️</h1>
+<div class="hp">
+  <div>Samurai: <div class="bar"><div id="hp1" class="fill" style="width:100%"></div></div></div>
+  <div>Pirate: <div class="bar"><div id="hp2" class="fill" style="width:100%"></div></div></div>
+</div>
+<canvas id="game" width="400" height="300"></canvas>
+<p>Player 1: A=Move, D=Move, W=Jump, J=Punch | Player 2: ← → Move, ↑ Jump, L=Card Throw</p>
+
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+let samurai = {x:50, y:250, w:40, h:40, hp:100, color:'#00ffff'};
+let pirate = {x:310, y:250, w:40, h:40, hp:100, color:'#ff00ff'};
+let cards = [];
+let keys = {};
+
+document.addEventListener('keydown', e => keys[e.key] = true);
+document.addEventListener('keyup', e => keys[e.key] = false);
+
+function update() {
+  // Samurai controls A D W J
+  if(keys['a']) samurai.x -= 3;
+  if(keys['d']) samurai.x += 3;
+  if(keys['j']) { if(Math.abs(samurai.x - pirate.x) < 50) pirate.hp -= 5; }
+  
+  // Pirate controls ← → ↑ L
+  if(keys['ArrowLeft']) pirate.x -= 3;
+  if(keys['ArrowRight']) pirate.x += 3;
+  if(keys['l']) cards.push({x:pirate.x, y:pirate.y, speed:-5});
+  
+  // Cards
+  cards.forEach(c => {
+    c.x += c.speed;
+    if(Math.abs(c.x - samurai.x) < 40) samurai.hp -= 10;
+  });
+  cards = cards.filter(c => c.x > 0 && c.x < 400);
+  
+  // Update HP bars
+  document.getElementById('hp1').style.width = samurai.hp + '%';
+  document.getElementById('hp2').style.width = pirate.hp + '%';
+  
+  // Keep in bounds
+  samurai.x = Math.max(0, Math.min(360, samurai.x));
+  pirate.x = Math.max(0, Math.min(360, pirate.x));
+}
+
+function draw() {
+  ctx.clearRect(0,0,400,300);
+  ctx.fillStyle = '#222'; ctx.fillRect(0,280,400,20); // ground
+  
+  // Draw Samurai
+  ctx.fillStyle = samurai.color;
+  ctx.fillRect(samurai.x, samurai.y, samurai.w, samurai.h);
+  ctx.fillText('SAM', samurai.x+5, samurai.y-5);
+  
+  // Draw Pirate  
+  ctx.fillStyle = pirate.color;
+  ctx.fillRect(pirate.x, pirate.y, pirate.w, pirate.h);
+  ctx.fillText('PIR', pirate.x+5, pirate.y-5);
+  
+  // Draw cards
+  ctx.fillStyle = '#fff';
+  cards.forEach(c => ctx.fillRect(c.x, c.y, 10, 15));
+  
+  if(samurai.hp <= 0) ctx.fillText('PIRATE WINS!', 150, 150);
+  if(pirate.hp <= 0) ctx.fillText('SAMURAI WINS!', 150, 150);
+}
+
+function loop() {
+  update(); draw();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
