@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Rewards - Onike AI Hub</title>
+  <style>
+    body { font-family: Arial; background: #0a0a0a; color: white; padding: 20px; text-align: center; }
+    .container { max-width: 500px; margin: auto; }
+    h1 { color: #00ff88; }
+    .badge { background: red; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+    .package { background: #1a1a1a; padding: 20px; margin: 15px 0; border-radius: 15px; border: 2px solid #00ff88; }
+    .price { font-size: 1.8em; color: #00ff88; font-weight: bold; }
+    .bonus { color: #00ff88; font-size: 1.2em; font-weight: bold; }
+    .btn { background: #00ff88; color: black; padding: 14px; width: 90%; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    .note { color: #aaa; font-size: 12px; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎁 Onike AI Rewards</h1>
+    <p>Top up and get BONUS credits instantly <span class="badge">LIMITED TIME</span></p>
+
+    <div class="package">
+      <h2>Starter Reward</h2>
+      <p>Pay: <span class="price">500 UGX</span></p>
+      <p>Get: <span class="bonus">1050 UGX Credits</span></p>
+      <p><small>= 2 AI Images + 100 Bonus</small></p>
+      <button class="btn" onclick="buy(500)">Claim 500 Reward</button>
+    </div>
+
+    <div class="package">
+      <h2>Pro Reward</h2>
+      <p>Pay: <span class="price">1000 UGX</span></p>
+      <p>Get: <span class="bonus">2500 UGX Credits</span></p>
+      <p><small>= 5 AI Images + 1 AI Video</small></p>
+      <button class="btn" onclick="buy(1000)">Claim 1000 Reward</button>
+    </div>
+
+    <div class="package">
+      <h2>Elite Reward</h2>
+      <p>Pay: <span class="price">2000 UGX</span></p>
+      <p>Get: <span class="bonus">4500 UGX Credits</span></p>
+      <p><small>= 10 AI Images + 2 Videos</small></p>
+      <button class="btn" onclick="buy(2000)">Claim 2000 Reward</button>
+    </div>
+
+    <div class="package">
+      <h2>Boss Reward</h2>
+      <p>Pay: <span class="price">5000 UGX</span></p>
+      <p>Get: <span class="bonus">11000 UGX Credits</span></p>
+      <p><small>= 20 AI Images + 5 Videos</small></p>
+      <button class="btn" onclick="buy(5000)">Claim 5000 Reward</button>
+    </div>
+
+    <a href="index.html" class="btn" style="background:#333; color:white;">← Back to Dashboard</a>
+    <p class="note">Credits are added to your account instantly. Use them for AI Tools, Images, Videos.</p>
+  </div>
+
+<script>
+  function buy(amount) {
+    alert("You selected " + amount + " UGX Reward.\n\nNext: Pay via MoMo/Airtel Money.\nWhatsApp Admin to activate: 0795377453");
+    window.location.href = "https://wa.me/256795377453?text=Hello Onike, I want to claim " + amount + " UGX AI Rewards Pack";
+  }
+</script>
+</body>
+</html>
