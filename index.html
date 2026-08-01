@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onike AI Hub - Login</title>
+  <style>
+    body { font-family: Arial; background: #0a0a0a; color: white; text-align: center; padding: 20px; }
+    .container { max-width: 400px; margin: 50px auto; background: #1a1a1a; padding: 30px; border-radius: 15px; border: 2px solid #00ff88; }
+    h1 { color: #00ff88; }
+    input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; background: #2a2a2a; color: white; }
+    .btn { background: #00ff88; color: black; padding: 14px; width: 95%; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin: 10px 0; }
+    .menu-btn { display: block; background: #2a2a2a; margin: 10px 0; padding: 15px; border-radius: 10px; text-decoration: none; color: #00ff88; font-weight: bold; }
+    #dashboard { display: none; }
+  </style>
+</head>
+<body>
+  <h1>Onike AI Hub 🇺🇬</h1>
+
+  <!-- LOGIN / REGISTER FORM -->
+  <div class="container" id="auth">
+    <h2>Login / Register</h2>
+    <input type="text" id="name" placeholder="Your Name">
+    <input type="tel" id="phone" placeholder="WhatsApp Number: 0795377453">
+    <input type="password" id="password" placeholder="Create Password">
+    <button class="btn" onclick="login()">Login / Join</button>
+    <p><small>50,000 UGX Course unlocks after payment</small></p>
+  </div>
+
+  <!-- DASHBOARD AFTER LOGIN -->
+  <div class="container" id="dashboard">
+    <h2>Welcome to Onike Hub</h2>
+    <a href="https://wa.me/256795377453" class="menu-btn">💬 Chat Admin - Support</a>
+    <a href="#" class="menu-btn">👥 Chat Friends - Coming Soon</a>
+    <a href="#" class="menu-btn">🎨 AI Tools - 500 UGX</a>
+    <a href="#" class="menu-btn">📚 My Course - 50,000 UGX</a>
+    <a href="#" class="menu-btn">🖼️ Our Work / Portfolio</a>
+    <a href="#" class="menu-btn">📢 Promote Business - 5000 UGX</a>
+    <button class="btn" onclick="logout()" style="background: red; color: white;">Logout</button>
+  </div>
+
+<script>
+  function login() {
+    let name = document.getElementById('name').value;
+    if(name === "") { alert("Please enter your name"); return; }
+    localStorage.setItem("onike_user", name);
+    document.getElementById('auth').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  }
+  function logout() {
+    localStorage.removeItem("onike_user");
+    document.getElementById('auth').style.display = 'block';
+    document.getElementById('dashboard').style.display = 'none';
+  }
+  if(localStorage.getItem("onike_user")) {
+    document.getElementById('auth').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+  }
+</script>
+</body>
+</html>
