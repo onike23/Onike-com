@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ONIKE AI HUB</title>
+  <style>
+    body {background:#000; color:#fff; font-family:Arial; text-align:center; padding:20px}
+    .btn {background:#0f0; color:#000; border:none; padding:15px; margin:10px; width:90%; border-radius:10px; font-size:16px; font-weight:bold}
+    input {padding:10px; margin:5px; width:80%; border-radius:5px; border:none}
+    h1 {color:#0f0; text-shadow:0 0 10px #0f0}
+  </style>
+</head>
+<body>
+
+  <h1>🚀 ONIKE AI HUB</h1>
+  <p>Your AI Business Starts Here</p>
+
+  <button class="btn">💎 AI Rewards - Earn Credits</button>
+  <button class="btn">📁 Portfolio - Hire Me</button>
+  <button class="btn">🎓 AI Course - 50,000 UGX</button>
+
+  <h2>💳 MY WALLET</h2>
+  
+  <!-- DEPOSIT FORM -->
+  <h3>Deposit</h3>
+  <form action="https://Onikez.pythonanywhere.com/deposit" method="post">
+    <input name="phone" placeholder="MTN Number 2567XXXXXXXX" required><br>
+    <input name="amount" type="number" placeholder="Amount UGX" required><br>
+    <button class="btn" type="submit">Send Deposit Request</button>
+  </form>
+
+  <!-- WITHDRAW FORM -->
+  <h3>Withdraw</h3>
+  <form action="https://Onikez.pythonanywhere.com/withdraw" method="post">
+    <input name="phone" placeholder="MTN Number 2567XXXXXXXX" required><br>
+    <input name="amount" type="number" placeholder="Amount UGX" required><br>
+    <button class="btn" type="submit">Send Withdraw</button>
+  </form>
+
+  <p style="font-size:12px; margin-top:30px">© 2026 Onike AI | WhatsApp: 0795 377 453</p>
+
+</body>
+  </html>
